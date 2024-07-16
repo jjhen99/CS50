@@ -9,16 +9,15 @@ int only_digits(string input);
 
 int main(int argc, string argv[])
 {
-    //Ask for a key, if there is no key print Usage: - argc must be 2
+    // Ask for a key, if there is no key print Usage: - argc must be 2
 
-
-    if(argc == 2 && only_digits(argv[1]) && atoi(argv[1]) > 0)
+    if (argc == 2 && only_digits(argv[1]) && atoi(argv[1]) > 0)
     {
         int key = atoi(argv[1]);
-        //Ask for input
+        // Ask for input
         string plaintext = get_string("plaintext: ");
 
-        //Calculate and display ciphertext
+        // Calculate and display ciphertext
         calculate_cipher(plaintext, key);
 
         return 0;
@@ -29,23 +28,22 @@ int main(int argc, string argv[])
         printf("Usage: ./caesar key\n");
         return 1;
     }
-
 }
 
 void calculate_cipher(string plaintext, int key)
 {
     printf("ciphertext: ");
-    string ciphertext  = "";
+    string ciphertext = "";
     int p_i = 0;
     int c_i = 0;
     char c = ' ';
 
-    for(int i = 0, n = strlen(plaintext); i<n; i++)
+    for (int i = 0, n = strlen(plaintext); i < n; i++)
     {
-        //Find p_i of the character so it can be converted used in the formula
-        if(isalpha(plaintext[i]))
+        // Find p_i of the character so it can be converted used in the formula
+        if (isalpha(plaintext[i]))
         {
-            switch(plaintext[i])
+            switch (plaintext[i])
             {
                 case 'A':
                 case 'a':
@@ -185,9 +183,9 @@ void calculate_cipher(string plaintext, int key)
 
         // Find new character according to c_i
         // Check upper characters
-        if(isupper(plaintext[i]))
+        if (isupper(plaintext[i]))
         {
-            switch(c_i)
+            switch (c_i)
             {
                 case 0:
                     c = 'A';
@@ -293,13 +291,13 @@ void calculate_cipher(string plaintext, int key)
                     c = 'Z';
                     break;
             }
-
         }
 
-        // If the character for the original plaintext is lower case, new character will also be lower case
-        else if(islower(plaintext[i]))
+        // If the character for the original plaintext is lower case, new character will also be
+        // lower case
+        else if (islower(plaintext[i]))
         {
-            switch(c_i)
+            switch (c_i)
             {
                 case 0:
                     c = 'a';
@@ -407,14 +405,13 @@ void calculate_cipher(string plaintext, int key)
             }
         }
 
-        //Non alphabetic characters will be the same as character from plaintext
+        // Non alphabetic characters will be the same as character from plaintext
         else
         {
             c = plaintext[i];
         }
 
-
-        printf("%c",c);
+        printf("%c", c);
     }
 
     printf("\n");
@@ -424,9 +421,9 @@ int only_digits(string input)
 {
     int flag = 1;
 
-    for(int i = 0, n = strlen(input); i < n; i++)
+    for (int i = 0, n = strlen(input); i < n; i++)
     {
-        if(isdigit(input[i]) == 0)
+        if (isdigit(input[i]) == 0)
         {
             flag = 0;
             break;
