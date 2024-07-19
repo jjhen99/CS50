@@ -1,0 +1,17 @@
+sort1 uses: bubble
+
+How do you know?: The best case scenario for a bubble sort is O(n). SO for an already sorted list of numbers, it should be faster than the linear sort. Clearly, sort1 is faster than sort3 for already sorted numbers.
+
+sort2 uses: merge sort
+
+How do you know?: It is much faster than the other sorts and merge sort is faster than bubble or selection sorts
+
+sort3 uses: selection sort
+
+How do you know?: The best case scenario for the selection sort is O(n^2). Therefore it should be the slowest compared to the bubble sort and merge sort. For an already sorted lost, it is clearly the slowest. This is because it needs to compare every number with every other number to check if they need to be swapped, which is very slow.
+
+        random5000 random10000 random50000 reversed5000 reversed10000 reversed50000 sorted5000 sorted10000 sorted50000
+sort1   0.067s     0.228s      7.401s      0.070s       0.234s        4.761s        0.043s     0.066s      0.495s
+sort2   0.045s     0.082s      0.829s      0.037s       0.113s        0.572s        0.042s     0.066s      0.447s
+sort3   0.058s     0.139s      2.565s      0.051s       0.136s        2.690s        0.096s     0.160s      2.286s
+
