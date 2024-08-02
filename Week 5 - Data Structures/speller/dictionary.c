@@ -9,13 +9,14 @@
 #include "dictionary.h"
 
 // Represents a node in a hash table
+// Next node is contained in node
 typedef struct node
 {
     char word[LENGTH + 1];
     struct node *next;
 } node;
 
-// TODO: Choose number of buckets in hash table
+// Choose number of buckets in hash table
 // Perhaps use more buckets - a, aa, ab, ac etc.
 // In total 26*26 + 26 buckets = 702 buckets
 
@@ -73,25 +74,30 @@ bool check(const char *word)
 }
 
 // Hashes word to a number
-// Take first letter of a word and return a unsigned int between 0 to 25
+// Take first letter of a word and return a unsigned int between 0 to 18277
 // OR use 702 buckets. Check first character of a word and assign
+
+// Hash function seems to work fine
 unsigned int hash(const char *word)
 {
-    // TODO: Improve this hash function
-
     if (word == NULL || word[0] == '\0')
     {
         return 0;
     }
 
     char first = tolower(word[0]);
+
+    // If second character is not null, second character becomes lowercase
+    // Otherwise, second character is \0
+    // Same logic applies to third character
     char second = (word[1] != '\0') ? tolower(word[1]) : '\0';
     char third = (word[2] != '\0') ? tolower(word[2]) : '\0';
 
     // Hash value
+    // Subtract ASCII value of 'a' or 97 from first value
     int hash_value = first - 'a';
 
-    // If second letter exists change has value. aa = 26, ab = 27, aaa = 703
+    // If second letter exists change hash value. aa = 26, ab = 27, aaa = 702
     if (isalpha(second))
     {
         hash_value = hash_value * 26 + (second - 'a') + 26; // Adding 26 for second letter
@@ -132,7 +138,7 @@ bool load(const char *dictionary)
         }
 
         // Add each word to the hash table
-        int word_hash = hash(word_in_text);
+        int bucket = hash(word_in_text);
 
         node *new_node = malloc(sizeof(node));
         if (new_node == NULL)
@@ -145,9 +151,11 @@ bool load(const char *dictionary)
 
         // Copy the word into the new node
         strncpy(new_node->word, word_in_text, LENGTH);
-        new_node->word[LENGTH] = '\0'; // Ensure null termination
-        new_node->next = table[word_hash];
-        table[word_hash] = new_node;
+        new_node->word[LENGTH] = '\0';  // Ensure null termination
+        new_node->next = table[bucket]; // new node points to the same address that table[bucket]
+                                        // points to which is the first node in the linked list
+        table[bucket] = new_node; // now table bucket points to new_node, making new_node the first
+                                  // node in the linked list
     }
 
     // Close the dictionary file
@@ -160,7 +168,6 @@ bool load(const char *dictionary)
 // Could count each word as the dictionary is loaded OR count through words in hash table
 unsigned int size(void)
 {
-    // TODO
     // Most likely best to count words in hash table since it is a global variable
 
     int counter = 0;
@@ -173,7 +180,7 @@ unsigned int size(void)
         while (current != NULL)
         {
             counter++;
-            current = current->next;
+            current = current->next; // current node now becomes the next node in the linked list
         }
     }
 
