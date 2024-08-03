@@ -26,7 +26,7 @@ typedef struct node
 // Five characters would be 12,356,630 buckets
 // Theoretically could go up to six characters - 321,272,406 buckets
 // Using 321,272,406 buckets actually makes the time to unload very long
-const unsigned int N = 143901;
+const unsigned int N = 475254;
 
 // Hash table
 node *table[N];
@@ -37,22 +37,32 @@ node *table[N];
 // Can use strcasecmp, but must consider case-insensitivity
 bool check(const char *word)
 {
+    // TODO
     if (word == NULL || strlen(word) == 0)
     {
         return false;
     }
 
+    int len = strlen(word);
+
     // Convert word to lower case
     char lower_word[LENGTH + 1];
-    int len = strlen(word);
-    for (int i = 0; i < len; i++)
+    for (int i = 0; word[i] != '\0'; i++)
     {
         lower_word[i] = tolower((unsigned char) word[i]);
     }
+
     lower_word[len] = '\0'; // Add null terminator
 
     // Find the bucket
     unsigned int bucket = hash(lower_word);
+
+    // Validate bucket index
+    if (bucket >= N)
+    {
+        fprintf(stderr, "Invalid bucket index: %u\n", bucket);
+        return false;
+    }
 
     // Traverse the linked list in the bucket
     node *current = table[bucket];
@@ -77,16 +87,41 @@ bool check(const char *word)
 
 unsigned int hash(const char *word)
 {
-    // Uses djb2 algorithm
-    unsigned long hash_value = 5381;
-    int c;
-
-    while ((c = *word++))
+    if (word == NULL || word[0] == '\0')
     {
-        hash_value = ((hash_value << 5) + hash_value) + tolower(c); // hash * 33 + c
+        return 0;
     }
 
-    return hash_value % N;
+    char first = tolower(word[0]);
+
+    // If second character is not null, second character becomes lowercase
+    // Otherwise, second character is \0
+    // Same logic applies to third character
+    char second = (word[1] != '\0') ? tolower(word[1]) : '\0';
+    char third = (word[2] != '\0') ? tolower(word[2]) : '\0';
+    char fourth = (word[3] != '\0') ? tolower(word[3]) : '\0';
+
+    // Hash value
+    // Subtract ASCII value of 'a' or 97 from first value
+    int hash_value = first - 'a';
+
+    // If second letter exists change hash value. aa = 26, ab = 27, aaa = 702
+    if (isalpha(second))
+    {
+        hash_value = hash_value * 26 + (second - 'a') + 26; // Adding 26 for second letter
+    }
+
+    if (isalpha(third))
+    {
+        hash_value = hash_value * 26 + (third - 'a') + 26;
+    }
+
+    if (isalpha(fourth))
+    {
+        hash_value = hash_value * 26 + (fourth - 'a') + 26;
+    }
+
+    return hash_value;
 }
 
 // Loads dictionary into memory, returning true if successful, else false

@@ -45697,8 +45697,8 @@ WORDS MISSPELLED:     45691
 WORDS IN DICTIONARY:  143091
 WORDS IN TEXT:        904612
 TIME IN load:         0.02
-TIME IN check:        0.79
+TIME IN check:        0.89
 TIME IN size:         0.00
 TIME IN unload:       0.00
-TIME IN TOTAL:        0.82
+TIME IN TOTAL:        0.91
 
